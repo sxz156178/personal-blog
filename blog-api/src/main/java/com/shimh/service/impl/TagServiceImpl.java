@@ -54,7 +54,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void deleteTagById(Integer id) {
-        tagRepository.delete(id);
+        tagRepository.deleteById(id);
     }
 
     @Override

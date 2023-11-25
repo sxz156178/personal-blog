@@ -100,7 +100,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public void deleteArticleById(Integer id) {
-        articleRepository.delete(id);
+        articleRepository.deleteById(id);
     }
 
     @Override

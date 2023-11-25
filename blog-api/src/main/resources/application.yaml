@@ -1,32 +1,28 @@
 server:
   port: 8888
 
-#spring:
-#  http:
-#    multipart:
-#      maxFileSize: 20Mb
-#      maxRequestSize: 30Mb
-
-me:
-  upload:
-    path: D:/blogFile/
-
 spring:
+  http:
+    multipart:
+      maxFileSize: 20Mb #允许上传的文件最大大小为 20MB。
+      maxRequestSize: 30Mb
   mvc:
-    static-path-pattern: /**
+    static-path-pattern: /**  #指定了静态资源的访问路径模式为全部路径匹配。
   resources:
-    static-locations: |
+    static-locations: |  #静态资源的位置配置。
       classpath:/META-INF/resources/
       classpath:/resources/
       classpath:/static/
       classpath:/public/
       file: ${me.upload.path}
+      
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/blog?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-    username: root
-    password: "123456"
+    url: jdbc:mysql://localhost:3306/blog?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#    serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+    username: 'root'
+    password: 'uTcquL9hMjTD'
     driver-class-name: com.mysql.jdbc.Driver
     druid:
       initial-size: 5
@@ -45,28 +41,37 @@ spring:
       filter:
         stat:
           merge-sql: true
-      stat-view-servlet:
+      stat-view-servlet:  #这段配置是针对 Druid 数据源监控的配置，其中的 stat-view-servlet 部分是用来配置 Druid 的监控页面访问权限和设置。
         login-username: shimh
         login-password: shimh
         reset-enable: false
-        allow: 172.16.8.2
+        allow: 172.16.8.2 #设置允许访问 Druid 监控页面的 IP 地址为 "172.16.8.2"，只有这个 IP 地址的请求能够访问 Druid 的监控页面。
+
+      aop-patterns:
+        - com.shimh.*
 
   jpa:
-    show-sql: true
+    show-sql: true  #是否在控制台显示 SQL 语句。
     hibernate:
-      ddl-auto: update
+      ddl-auto: update  #应用启动时，Hibernate 自动更新数据库结构，如果不存在则创建。
 
   redis:
     database: 0
     host: localhost
     port: 6379
-    password: ""
+    password:
     timeout: 10000
     pool:
       max-active: 8
       max-wait: -1
       max-idle: 8
       min-idle: 0
+
+
+#me:
+#  upload:
+#    path: D:/blogFile/
+
 
 logging:
   config: classpath:log4j2-spring.xml

@@ -37,7 +37,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
 
-        return userRepository.findOne(id);
+        //TODO
+        return userRepository.findById(id).get();
     }
 
     @Override
@@ -56,7 +57,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long updateUser(User user) {
-        User oldUser = userRepository.findOne(user.getId());
+        //TODO
+        User oldUser = userRepository.findById(user.getId()).get();
         oldUser.setNickname(user.getNickname());
 
         return oldUser.getId();
@@ -65,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUserById(Long id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
 }

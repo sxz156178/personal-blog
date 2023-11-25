@@ -3,6 +3,7 @@ package com.shimh.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.shimh.entity.User;
 import com.shimh.repository.UserRepository;
@@ -56,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteCommentById(Integer id) {
-        commentRepository.delete(id);
+        commentRepository.deleteById(id);
     }
 
     @Override
@@ -71,7 +72,11 @@ public class CommentServiceImpl implements CommentService {
     public Comment saveCommentAndChangeCounts(Comment comment) {
 
         int count = 1;
-        Article a = articleRepository.findOne(comment.getArticle().getId());
+        Optional<Article> optionalArticle = articleRepository.findById(comment.getArticle().getId());
+        if (!optionalArticle.isPresent()){
+            return null;
+        }
+        Article a = optionalArticle.get();
         a.setCommentCounts(a.getCommentCounts() + count);
 
         comment.setAuthor(UserUtils.getCurrentUser());
@@ -96,7 +101,11 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void deleteCommentByIdAndChangeCounts(Integer id) {
         int count = 1;
-        Comment c = commentRepository.findOne(id);
+        Optional<Comment> optionalComment = commentRepository.findById(id);
+        if (!optionalComment.isPresent()){
+            return;
+        }
+        Comment c = optionalComment.get();
         Article a = c.getArticle();
 
         a.setCommentCounts(a.getCommentCounts() - count);
